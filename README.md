@@ -1,13 +1,61 @@
-# Sample Hardhat Project
+# 🗄️ Storage Smart Contract
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+A simple Solidity project to store and retrieve a number, deployed on the **Core DAO Testnet**.
 
-Try running some of the following tasks:
+## 📌 Contract Details
+- **Name:** Storage  
+- **Network:** Core DAO Testnet  
+- **Deployed Address:** `0x01Dd17b8D6Ba79DD1F0287707E71435C2A3fb51f`  
+- **Compiler Version:** Solidity `0.8.20`  
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.js
+## ⚡ Functionality
+- `setNumber(uint256 _number)` → Stores a new number on-chain.  
+- `getNumber()` → Returns the currently stored number.  
+
+## 🛠️ Deployment
+
+This project uses **Hardhat** + **Ethers v6**.  
+
+### Deploy Command
+```bash
+npx hardhat run scripts/deploy.js --network coretestnet
 ```
+
+### Deploy Script (`scripts/deploy.js`)
+```javascript
+const hre = require("hardhat");
+
+async function main() {
+  const Storage = await hre.ethers.getContractFactory("Storage");
+  const storage = await Storage.deploy();
+  console.log("Storage deployed to:", await storage.getAddress());
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
+```
+
+## 🔗 Interaction Examples
+
+Using **Hardhat console**:
+
+```bash
+npx hardhat console --network coretestnet
+```
+
+Then:
+
+```javascript
+const Storage = await ethers.getContractAt("Storage", "0x01Dd17b8D6Ba79DD1F0287707E71435C2A3fb51f");
+
+// Set number
+await Storage.setNumber(42);
+
+// Get number
+const value = await Storage.getNumber();
+console.log("Stored value:", value.toString());
+```
+
+---
